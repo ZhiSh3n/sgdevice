@@ -2,9 +2,12 @@ package sgdevice;
 
 public class Device {
 	
-	public String orientation; // can be z, x, or trident
-	public int trident;
+	public String orientation;
+	public int theta;
 	
-	// stuff the sg device needs to have
+	public Device(String orientation, int theta) {
+		this.orientation = orientation;
+		this.theta = theta;
+	}
 
 }
