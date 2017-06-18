@@ -19,6 +19,7 @@ public class Mover {
 		this.layer = layer;
 		this.children = new ArrayList<>();
 		this.parent = parent;
+		this.device = new Device();
 	}
 	
 	public void addChild() {

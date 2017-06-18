@@ -6,11 +6,6 @@ public class Device {
 	public String orientation;
 	public int degree;
 	
-	// it will also have 2 connectors
-	public Device firstConnector;
-	public Device secondConnector;
-	
-	
 	public Device() {
 		this.orientation = null;
 		this.degree = 0;
