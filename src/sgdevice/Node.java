@@ -21,7 +21,7 @@ public class Node {
 		if (this.children.size() > 2) {
 			System.out.println("You can't create any more children for this node.");
 		} else {
-			Node child = new Node(this, (this.layer+1))
+			Node child = new Node(this, (this.layer+1));
 		}
 	}
 	
