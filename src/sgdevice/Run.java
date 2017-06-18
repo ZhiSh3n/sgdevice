@@ -3,6 +3,27 @@ package sgdevice;
 import java.util.Scanner;
 
 public class Run {
+	
+	/*
+	 * Define eigenvectors:
+	 * 
+	 * +z = [1,0]
+	 * -z = [0,1]
+	 * 
+	 * +x = [sqrt(1/2),sqrt(1/2)]
+	 * -x = [sqrt(1/2),-sqrt(1/2)]
+	 * 
+	 * +theta = [cos((1/2)theta),sin((1/2)theta)]
+	 * -theta = [-sin((1/2)theta),cos((1/2)theta)]
+	 */
+	
+	public int[] zplus;
+	zplus[0] = 1;
+	public int[] zminus;
+	public int[] xplus;
+	public int[] xminus;
+	public int[] thetaplus;
+	public int[] thetaminus;
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
@@ -16,7 +37,7 @@ public class Run {
 		 */
 
 		while (true) {
-			scanner.nextLine();	
+			scanner.nextLine();
 			for (int i = 0; i < 10; i++) {
 				System.out.println("");
 			}
@@ -27,6 +48,8 @@ public class Run {
 			System.out.println("   [goto parent] : navigate to the parent");
 			System.out.println("   [goto sibling] : navigate to a sibling #");
 			System.out.println("   [add child] : add a child (you will be promped to define an SG Device");
+			System.out.println("   [trace device] : how many devices in a row");
+			
 			String line = scanner.nextLine();
 			for (int i = 0; i < 10; i++) {
 				System.out.println("");
@@ -45,15 +68,34 @@ public class Run {
 			case "add child":
 				currentMover.addChild();
 				break;
+			case "trace device":
+				System.out.println(traceDevice(currentMover));
+				break;
 			default:
 				System.out.println("That is not a valid command.");
 			}
-			
+
 		}
 
 	}
 	
-	
+	// calculate probability
+	public static int calculateSingularProbability(Mover mover) {
+		while (mover.parent != null) {
+			mover = mover.parent;
+		}
+	}
+
+	// how many devices until root?
+	public static int traceDevice(Mover mover) {
+		int counter = 0;
+		while (mover.parent != null) {
+			mover = mover.parent;
+			counter++;
+		}
+		return (counter+1);
+	}
+
 	public static Mover sibling(Mover mover) {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter sibling element number: ");
@@ -64,8 +106,7 @@ public class Run {
 		} else {
 			return mover.parent.children.get(siblingNumber);
 		}
-		
-		
+
 	}
 
 	// move to the next layer, specifying a child number (0, 1, 2 ..)

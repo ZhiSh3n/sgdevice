@@ -24,17 +24,30 @@ public class Mover {
 	}
 	
 	public void addChild() {
-		System.out.println("Adding Child " + (this.children.size()));
-		this.children.add(new Mover(this.layer+1, this));
-		System.out.println("Child added.");
+		String closed = new String("closed");
+		String open = new String("open");
+		if (this.children.size() >= 2) {
+			System.out.println("You can add no more children.");
+		} else if (this.device.orientation.equals(closed)){
+			System.out.println("This device is closed.");
+		} else if (this.device.orientation.equals(open)) {
+			System.out.println("This device is open.");
+		} else {
+			System.out.println("Adding Child " + (this.children.size()));
+			this.children.add(new Mover(this.layer+1, this));
+			System.out.println("Child added.");
+		}
 	}
 	
 	public static void orientationChooser(Device device) {
-		System.out.println("Choose an orientation for this device [z][x][other]: ");
+		System.out.println("Choose an orientation for this device [z][x][other][theta][closed][open]: ");
 		Scanner reader = new Scanner(System.in);
 		String z = new String("z");
 		String x = new String("x");
 		String other = new String("other");
+		String closed = new String("closed");
+		String open = new String("open");
+		String theta = new String("theta");
 		int degree;
 		String orientation = reader.nextLine();
 		String compare = new String(orientation);
@@ -44,7 +57,7 @@ public class Mover {
 			degree = reader.nextInt();
 			device.setDegree(degree);
 		}
-		if ((!compare.equals(z) && !compare.equals(x)) && !compare.equals(other)) {
+		if (!compare.equals(z) && !compare.equals(x) && !compare.equals(other) && !compare.equals(closed) && !compare.equals(open) && !compare.equals(theta)) {
 			System.out.println("That is an unacceptable value. Try again.");
 			orientationChooser(device);
 		} else {

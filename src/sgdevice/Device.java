@@ -3,6 +3,7 @@ package sgdevice;
 public class Device {
 	
 	// a device will have an orientation/degree
+	// [z][x][other][closed] , also how to implement merge?
 	public String orientation;
 	public int degree;
 	
