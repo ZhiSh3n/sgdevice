@@ -1,32 +1,50 @@
 package sgdevice;
 
+import java.util.Scanner;
+
 public class Run {
 
 	public static void main(String[] args) {
-		
+		Scanner scanner = new Scanner(System.in);
 		Mover root = new Mover(0, null);
 		Mover currentMover = root;
 		view(currentMover);
+		currentMover.addChild();
+		view(currentMover);
 		
 		
-		/*
+		/* COMMANDS TO USE
 		currentMover = next(currentMover);
 		currentMover.addChild();
 		currentMover = previous(currentMover);
 		view(currentMover);
 		*/
 		
-	}
-	
-	// move to the next node
-	public static Mover next(Mover mover) {
-		if (mover.children.size() == 0) {
-			System.out.println("This mover has no children.");
-			next(mover);
-		} else {
-			return mover.children.get(0);
+		/*
+		while (true) {
+			System.out.println("Commands: ");
+			System.out.println("   [goto child] : navigate to ");
+			System.out.println("   [goto parent] : ");
+			System.out.println("   [goto sibling] : ");
+			String line = scanner.nextLine();
 		}
-		return null;
+		*/
+		
+	}
+
+	// move to the next layer, specifying a child number (0, 1, 2 ..)
+	public static Mover next(Mover mover, int childNumber) {
+		if (mover.children.size() == 0) { // if no children
+			System.out.println("This mover has no children.");
+			return mover;
+		} else {
+			if (childNumber >= mover.children.size()) {
+				System.out.println("That child does not exist.");
+				return mover;
+			} else {
+				return mover.children.get(childNumber);
+			}
+		}
 	}
 	
 	// move to the previous node
