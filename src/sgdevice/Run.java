@@ -20,8 +20,9 @@ public class Run {
 			for (int i = 0; i < 10; i++) {
 				System.out.println("");
 			}
+			view(currentMover);
+			System.out.println("");
 			System.out.println("Commands: ");
-			System.out.println("   [view] : view node information");
 			System.out.println("   [goto child] : navigate to child number # (starting from 0)");
 			System.out.println("   [goto parent] : navigate to the parent");
 			System.out.println("   [goto sibling] : navigate to a sibling #");
@@ -32,9 +33,6 @@ public class Run {
 			}
 
 			switch (line) {
-			case "view":
-				view(currentMover);
-				break;
 			case "goto child":
 				currentMover = next(currentMover);
 				break;
@@ -42,6 +40,7 @@ public class Run {
 				currentMover = previous(currentMover);
 				break;
 			case "goto sibling":
+				currentMover = sibling(currentMover);
 				break;
 			case "add child":
 				currentMover.addChild();
@@ -54,11 +53,20 @@ public class Run {
 
 	}
 	
-	/*
+	
 	public static Mover sibling(Mover mover) {
-		int index = mover.parent.children.indexOf(mover);
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Enter sibling element number: ");
+		int siblingNumber = scanner.nextInt();
+		if (siblingNumber == mover.parent.children.indexOf(mover)) {
+			System.out.println("You are already on that sibling/child.");
+			return mover;
+		} else {
+			return mover.parent.children.get(siblingNumber);
+		}
+		
+		
 	}
-	*/
 
 	// move to the next layer, specifying a child number (0, 1, 2 ..)
 	public static Mover next(Mover mover) {
