@@ -6,24 +6,15 @@ public class Run {
 		
 		Mover root = new Mover(0, null);
 		Mover currentMover = root;
-		
-		currentMover.addChild();
-		currentMover.addChild();
 		view(currentMover);
 		
+		
+		/*
 		currentMover = next(currentMover);
-		view(currentMover);
 		currentMover.addChild();
-		currentMover.addChild();
-		currentMover.addChild();
-		view(currentMover);
-		
-		currentMover = next(currentMover);
-		view(currentMover);
-		
 		currentMover = previous(currentMover);
 		view(currentMover);
-		
+		*/
 		
 	}
 	
@@ -52,6 +43,13 @@ public class Run {
 	public static void view(Mover mover) {
 		System.out.println("This node has " + mover.children.size() + " children.");
 		System.out.println("This node is in Layer: " + mover.layer);
+		String other = new String("other");
+		System.out.print("This node has an orientation: ");
+		if (mover.device.orientation.equals(other)) {
+			System.out.println(mover.device.degree);
+		} else {
+			System.out.println(mover.device.orientation);
+		}
 		System.out.println("");
 	}
 	

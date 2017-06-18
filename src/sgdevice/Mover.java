@@ -20,10 +20,34 @@ public class Mover {
 		this.children = new ArrayList<>();
 		this.parent = parent;
 		this.device = new Device();
+		orientationChooser(this.device);
 	}
 	
 	public void addChild() {
 		this.children.add(new Mover(this.layer+1, this));
+	}
+	
+	public static void orientationChooser(Device device) {
+		System.out.println("Choose an orientation for this device [z][x][other]: ");
+		Scanner reader = new Scanner(System.in);
+		String z = new String("z");
+		String x = new String("x");
+		String other = new String("other");
+		int degree;
+		String orientation = reader.nextLine();
+		String compare = new String(orientation);
+		if (compare.equals(other)) {
+			// if equals other, ask for a degree
+			System.out.println("Choose a degree: ");
+			degree = reader.nextInt();
+			device.setDegree(degree);
+		}
+		if ((!compare.equals(z) && !compare.equals(x)) && !compare.equals(other)) {
+			System.out.println("That is an unacceptable value. Try again.");
+			orientationChooser(device);
+		} else {
+			device.setOrientation(orientation);
+		}
 	}
 	
 
