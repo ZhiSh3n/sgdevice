@@ -1,5 +1,5 @@
 package sgdevice;
 
-public class Define {
+public class Mover {
 
 }
