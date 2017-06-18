@@ -3,27 +3,19 @@ package sgdevice;
 import java.util.Scanner;
 
 public class Run {
-	
+
 	/*
 	 * Define eigenvectors:
 	 * 
-	 * +z = [1,0]
+	 * +z = [1,0] 
 	 * -z = [0,1]
 	 * 
-	 * +x = [sqrt(1/2),sqrt(1/2)]
+	 * +x = [sqrt(1/2),sqrt(1/2)] 
 	 * -x = [sqrt(1/2),-sqrt(1/2)]
 	 * 
-	 * +theta = [cos((1/2)theta),sin((1/2)theta)]
+	 * +theta = [cos((1/2)theta),sin((1/2)theta)] 
 	 * -theta = [-sin((1/2)theta),cos((1/2)theta)]
 	 */
-	
-	public int[] zplus;
-	zplus[0] = 1;
-	public int[] zminus;
-	public int[] xplus;
-	public int[] xminus;
-	public int[] thetaplus;
-	public int[] thetaminus;
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
@@ -49,13 +41,16 @@ public class Run {
 			System.out.println("   [goto sibling] : navigate to a sibling #");
 			System.out.println("   [add child] : add a child (you will be promped to define an SG Device");
 			System.out.println("   [trace device] : how many devices in a row");
-			
+
 			String line = scanner.nextLine();
 			for (int i = 0; i < 10; i++) {
 				System.out.println("");
 			}
 
 			switch (line) {
+			case "calculate":
+				calculateSingularProbability(currentMover);
+				break;
 			case "goto child":
 				currentMover = next(currentMover);
 				break;
@@ -78,12 +73,75 @@ public class Run {
 		}
 
 	}
-	
-	// calculate probability
-	public static int calculateSingularProbability(Mover mover) {
-		while (mover.parent != null) {
+
+	public static int[] getPosOrNegArray(Mover mover) {
+		// did we call probability from 0 (positive) or 1 (negative)
+		// create an array of positive and negatives
+		int[] posOrNeg = new int[traceDevice(mover) - 1];
+		for (int i = (posOrNeg.length - 1); i > -1; i--) {
+			posOrNeg[i] = mover.parent.children.indexOf(mover);
 			mover = mover.parent;
 		}
+		return posOrNeg;
+	}
+
+	// calculate probability
+	public static void calculateSingularProbability(Mover mover) {
+		// create an array for eigenvectors
+		// eg. if traceDevice = 3, there are 2 complete SG devices
+		double[][] array = new double[traceDevice(mover) - 1][2];
+
+		// POS OR NEG HERE TODO
+		int[] posOrNeg = getPosOrNegArray(mover);
+
+		// first we go to the latest SG Device
+		// note that counter is decreased by 1 already here.
+		mover = mover.parent;
+
+		for (int counter = traceDevice(mover) - 1; counter > -1; counter--){ // TODO probably wanna use a for loop and layer numbers
+			System.out.println("Counter is: " + counter);
+
+			switch (mover.device.orientation) {
+			case "x":
+				if (posOrNeg[counter] == 0) {
+					array[counter][0] = Math.sqrt(0.5);
+					array[counter][1] = Math.sqrt(0.5);
+				} else {
+					array[counter][0] = Math.sqrt(0.5);
+					array[counter][1] = -1 * Math.sqrt(0.5);
+				}
+				break;
+			case "z":
+				if (posOrNeg[counter] == 0) {
+					array[counter][0] = 1;
+					array[counter][1] = 0;
+				} else {
+					array[counter][0] = 0;
+					array[counter][1] = 1;
+				}
+				break;
+			case "other":
+				if (posOrNeg[counter] == 0) {
+					// it is positve theta
+					array[counter][0] = Math.cos(0.5 * mover.device.degree * Math.PI / 180);
+					array[counter][1] = Math.sin(0.5 * mover.device.degree * Math.PI / 180);
+				} else {
+					// it is a negative theta
+					array[counter][0] = -1 * Math.sin((1 / 2) * mover.device.degree * Math.PI / 180);
+					array[counter][1] = Math.cos((1 / 2) * mover.device.degree * Math.PI / 180);
+				}
+				break;
+			default:
+			}
+			mover = mover.parent;
+		}
+
+		for (int a = array.length - 1; a > -1; a--) {
+			for (int b = 0; b < array[0].length; b++) {
+				System.out.println(array[a][b]);
+			}
+		}
+
 	}
 
 	// how many devices until root?
@@ -93,7 +151,7 @@ public class Run {
 			mover = mover.parent;
 			counter++;
 		}
-		return (counter+1);
+		return (counter + 1);
 	}
 
 	public static Mover sibling(Mover mover) {
