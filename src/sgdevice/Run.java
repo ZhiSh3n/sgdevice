@@ -4,65 +4,57 @@ import java.util.Scanner;
 
 public class Run {
 
-	public static int integerReader() {
-		Scanner temporaryReader = new Scanner(System.in);
-		System.out.println("Enter a number: ");
-		int temporaryInteger = temporaryReader.nextInt();
-		return temporaryInteger;
-	}
-
 	public static void orientationChooser(Device device) {
 
-		Scanner temporaryReader = new Scanner(System.in);
-		System.out.println("Choose an orientation: [z][x][other]");
+		Scanner reader = new Scanner(System.in);
+		
 
 		String z = new String("z");
 		String x = new String("x");
 		String other = new String("other");
 
-		int number;
-		String orientation = temporaryReader.nextLine();
-		String toCompare = new String(orientation); 
-		
-		if (toCompare.equals(other)) {
+		int degree;
+		String orientation = reader.nextLine();
+		String compare = new String(orientation);
+
+		if (compare.equals(other)) {
 			// if equals other, ask for a degree
-			System.out.println("Choose a degree.");
-			number = temporaryReader.nextInt();
-			System.out.println(number);
+			System.out.println("Choose a degree: ");
+			degree = reader.nextInt();
+			device.setDegree(degree);
 		}
-														
-														
-		if ((!toCompare.equals(z) && !toCompare.equals(x)) && !toCompare.equals(other)) {
+
+		if ((!compare.equals(z) && !compare.equals(x)) && !compare.equals(other)) {
 			System.out.println("That is an unacceptable value. Try again.");
-			orientationChooser(holder);
+			orientationChooser(device);
 		} else {
-			holder.setVal(receive);
+			device.setOrientation(orientation);
 		}
+
 	}
-	
 
 	public static void main(String[] args) {
-
 		
-		System.out.println("How many SG devices?");
-		int SGCount = integerReader();
-		Device[] SGDevices = new Device[SGCount]; // create an array of all the SG devices
+		System.out.println("How many SG Devices for this simulation?");
+		Scanner reader = new Scanner(System.in);
+		int SGCount = reader.nextInt();
+		Device[] list = new Device[SGCount];
 		
-		for (int i = 0; i < SGDevices.length; i++) {
-			System.out.println("What orientation should this SG device be?");
-			SGDevices[i];
+		for (int i = 0; i < list.length; i++) {
+			System.out.println("Choose an orientation [z][x][other] for SG Device #" + (i+1));
+			list[i] = new Device(); // instantiate each object
+			orientationChooser(list[i]);
 		}
 		
-
+		for (int i = 0; i < list.length; i++) {
+			String other = new String("other");
+			if (list[i].getOrientation().equals(other)) {
+				System.out.println("Orientation #" + (i+1) + ": " + list[i].getDegree());
+			} else {
+				System.out.println("Orientation #" + (i+1) + ": " + list[i].getOrientation());
+			}
+		}
 		
-		
-		/*
-		 * String orientation = "initial orientation"; 
-		Holder one = new Holder(orientation); // made a new holder that holds
-												// the String [orientation]
-		orientationChooser(one);
-		System.out.println(one.getVal());
-		*/
 
 	}
 

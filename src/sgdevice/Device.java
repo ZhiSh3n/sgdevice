@@ -3,11 +3,27 @@ package sgdevice;
 public class Device {
 	
 	public String orientation;
-	public int theta;
+	public int degree;
 	
-	public Device(String orientation, int theta) {
+	public Device() {
+		this.orientation = null;
+		this.degree = 0;
+	}
+	
+	public void setDegree(int degree) {
+		this.degree = degree;
+	}
+	
+	public void setOrientation(String orientation) {
 		this.orientation = orientation;
-		this.theta = theta;
+	}
+	
+	public String getOrientation() {
+		return this.orientation;
+	}
+	
+	public int getDegree() {
+		return this.degree;
 	}
 
 }
