@@ -16,7 +16,10 @@ public class Run {
 		 */
 
 		while (true) {
-			System.out.println("_____________________________________________________________");
+			scanner.nextLine();	
+			for (int i = 0; i < 10; i++) {
+				System.out.println("");
+			}
 			System.out.println("Commands: ");
 			System.out.println("   [view] : view node information");
 			System.out.println("   [goto child] : navigate to child number # (starting from 0)");
@@ -24,6 +27,9 @@ public class Run {
 			System.out.println("   [goto sibling] : navigate to a sibling #");
 			System.out.println("   [add child] : add a child (you will be promped to define an SG Device");
 			String line = scanner.nextLine();
+			for (int i = 0; i < 10; i++) {
+				System.out.println("");
+			}
 
 			switch (line) {
 			case "view":
@@ -41,11 +47,18 @@ public class Run {
 				currentMover.addChild();
 				break;
 			default:
+				System.out.println("That is not a valid command.");
 			}
 			
 		}
 
 	}
+	
+	/*
+	public static Mover sibling(Mover mover) {
+		int index = mover.parent.children.indexOf(mover);
+	}
+	*/
 
 	// move to the next layer, specifying a child number (0, 1, 2 ..)
 	public static Mover next(Mover mover) {
@@ -74,6 +87,9 @@ public class Run {
 	// view current node information
 	public static void view(Mover mover) {
 		System.out.println("This node has " + mover.children.size() + " children.");
+		if (mover.parent != null) {
+			System.out.println("This node is element " + mover.parent.children.indexOf(mover) + " among its sibings.");
+		}
 		System.out.println("This node is in Layer: " + mover.layer);
 		String other = new String("other");
 		System.out.print("This node has an orientation: ");

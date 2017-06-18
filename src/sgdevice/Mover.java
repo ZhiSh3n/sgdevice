@@ -26,6 +26,7 @@ public class Mover {
 	public void addChild() {
 		System.out.println("Adding Child " + (this.children.size()));
 		this.children.add(new Mover(this.layer+1, this));
+		System.out.println("Child added.");
 	}
 	
 	public static void orientationChooser(Device device) {
