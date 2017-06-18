@@ -11,8 +11,7 @@ public class Run {
 		return temporaryInteger;
 	}
 
-	public static void orientationChooser(String value) {
-		String carryValue = value;
+	public static void orientationChooser(Holder holder) {
 		
 		Scanner temporaryReader = new Scanner(System.in);
 		System.out.println("Choose an orientation: [z][x][other]");
@@ -21,14 +20,16 @@ public class Run {
 		String xValue = new String("x");
 		String otherValue = new String("other");
 		
-		carryValue = temporaryReader.nextLine();
-		String temporaryValue = new String(carryValue);
+		String receive = temporaryReader.nextLine();
+		String temporaryValue = new String(receive); // we have an String object [temporaryValue] we can compare to
+		
 		
 		if ((!temporaryValue.equals(zValue) && !temporaryValue.equals(xValue)) && !temporaryValue.equals(otherValue)) {
 			System.out.println("That is an unacceptable value. Try again.");
-			orientationChooser(carryValue);
+			orientationChooser(holder);
+		} else {
+			holder.setVal(receive);
 		}
-		value = carryValue;
 	}
 
 	public static void main(String[] args) {
@@ -39,9 +40,12 @@ public class Run {
 		 * Device[] SGDevices = new Device[SGCount];
 		 */
 		System.out.println("What orientation should this SG device be?");
-		String orientation = null;
-		orientationChooser(orientation);
-		System.out.println(orientation);
+		
+		String orientation = "initial orientation"; // initialize the orientation
+		Holder one = new Holder(orientation); // made a new holder that holds the String [orientation]
+		orientationChooser(one);
+		System.out.println(one.getVal());
+		
 	}
 
 }

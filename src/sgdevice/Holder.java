@@ -1,21 +1,17 @@
 package sgdevice;
 
 public class Holder <T> {
-	private T held = null;
+	private T val;
 	public Holder() {
-		
 	}
-	public Holder (T it) {
-		held = it;
+	public Holder(T v) {
+		this.val = v;
 	}
-	public void hold(T it) {
-		held = it;
+	public T getVal() {
+		return val;
 	}
-	public T held() {
-		return held;
+	public void setVal(T val) {
+		this.val = val;
 	}
-	@Override
-	public String toString() {
-		return String.valueOf(held);
-	}
+	
 }
