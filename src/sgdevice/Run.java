@@ -36,6 +36,7 @@ public class Run {
 			view(currentMover);
 			System.out.println("");
 			System.out.println("Commands: ");
+			System.out.println("   [calculate] : calculate eigenvectors for particular result");
 			System.out.println("   [goto child] : navigate to child number # (starting from 0)");
 			System.out.println("   [goto parent] : navigate to the parent");
 			System.out.println("   [goto sibling] : navigate to a sibling #");
@@ -49,7 +50,7 @@ public class Run {
 
 			switch (line) {
 			case "calculate":
-				calculateSingularProbability(currentMover);
+				System.out.println(calculateSingularProbability(currentMover));
 				break;
 			case "goto child":
 				currentMover = next(currentMover);
@@ -73,7 +74,12 @@ public class Run {
 		}
 
 	}
-
+	
+	public static void calculateAll(Mover mover) {
+		// i think you should start from the root
+	}
+	
+	
 	public static int[] getPosOrNegArray(Mover mover) {
 		// did we call probability from 0 (positive) or 1 (negative)
 		// create an array of positive and negatives
@@ -86,7 +92,7 @@ public class Run {
 	}
 
 	// calculate probability
-	public static void calculateSingularProbability(Mover mover) {
+	public static double calculateSingularProbability(Mover mover) {
 		// create an array for eigenvectors
 		// eg. if traceDevice = 3, there are 2 complete SG devices
 		double[][] array = new double[traceDevice(mover) - 1][2];
@@ -99,7 +105,7 @@ public class Run {
 		mover = mover.parent;
 
 		for (int counter = traceDevice(mover) - 1; counter > -1; counter--){ // TODO probably wanna use a for loop and layer numbers
-			System.out.println("Counter is: " + counter);
+			//System.out.println("Counter is: " + counter);
 
 			switch (mover.device.orientation) {
 			case "x":
@@ -136,12 +142,19 @@ public class Run {
 			mover = mover.parent;
 		}
 
-		for (int a = array.length - 1; a > -1; a--) {
-			for (int b = 0; b < array[0].length; b++) {
-				System.out.println(array[a][b]);
+		
+		// this portion only works for two SG devices, need to apply rule for more.
+		double result = 1;
+		double resultresult = 0;
+		for (int b = 0; b < array[0].length; b++) {
+			for (int a = array.length - 1; a > -1; a--) {
+				result *= array[a][b];
 			}
+			resultresult = resultresult + result;
 		}
-
+		
+		resultresult = Math.pow(resultresult, 2);
+		return resultresult;
 	}
 
 	// how many devices until root?
