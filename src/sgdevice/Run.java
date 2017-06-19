@@ -50,7 +50,8 @@ public class Run {
 
 			switch (line) {
 			case "calculate":
-				System.out.println(calculateSingularProbability(currentMover));
+				//System.out.println(calculateSingularProbability(currentMover));
+				calculateSingularProbability(currentMover);
 				break;
 			case "goto child":
 				currentMover = next(currentMover);
@@ -97,14 +98,14 @@ public class Run {
 		// eg. if traceDevice = 3, there are 2 complete SG devices
 		double[][] array = new double[traceDevice(mover) - 1][2];
 
-		// POS OR NEG HERE TODO
+		
 		int[] posOrNeg = getPosOrNegArray(mover);
 
 		// first we go to the latest SG Device
 		// note that counter is decreased by 1 already here.
 		mover = mover.parent;
 
-		for (int counter = traceDevice(mover) - 1; counter > -1; counter--){ // TODO probably wanna use a for loop and layer numbers
+		for (int counter = traceDevice(mover) - 1; counter > -1; counter--){ 
 			//System.out.println("Counter is: " + counter);
 
 			switch (mover.device.orientation) {
@@ -144,17 +145,63 @@ public class Run {
 
 		
 		// this portion only works for two SG devices, need to apply rule for more.
+		// 2 devices = 2
+		// 3 devices = 4
+		// 4 devices = 6
+		// 5 devices = 8
+		// 2x - 2
+		// i will create one array slot for each vector, then multiply TODO
+		
+		int remadeArrayLength = array.length * 2 - 2;
+		double[][] remadeArray = new double[remadeArrayLength][2];
+		remadeArray[0][0] = array[0][0];
+		remadeArray[0][1] = array[0][1];
+		remadeArray[remadeArray.length - 1][0] = array[array.length - 1][0];
+		remadeArray[remadeArray.length - 1][1] = array[array.length - 1][1];
+		
+		for(int a = array.length - 2; a > 0; a--) { // start at second to last element of array
+			remadeArray[(2*a)][0] = array[a][0];
+			remadeArray[(2*a)][1] = array[a][1];
+			
+			remadeArray[(2*a)-1][0] = array[a][0];
+			remadeArray[(2*a)-1][1] = array[a][1];
+		}
+		
+		// a, b, c
+		// a, b, b, c
+		
+		// a, b, c, d
+		// a, b, b, c, c, d, 
+		
+		
+		for (int a = array.length - 1; a > -1; a--) {
+			for (int b = 0; b < array[0].length; b++) {
+				System.out.println(array[a][b]);
+			}
+			System.out.println("-------");
+		}
+		System.out.println("-------");
+		for (int a = remadeArray.length - 1; a > -1; a--) {
+			for (int b = 0; b < remadeArray[0].length; b++) {
+				System.out.println(remadeArray[a][b]);
+			}
+			System.out.println("-------");
+		}
+		/*
 		double result = 1;
 		double resultresult = 0;
 		for (int b = 0; b < array[0].length; b++) {
 			for (int a = array.length - 1; a > -1; a--) {
+				System.out.println(array[a][b]);
 				result *= array[a][b];
 			}
 			resultresult = resultresult + result;
 		}
-		
-		resultresult = Math.pow(resultresult, 2);
-		return resultresult;
+		*/
+	
+		//resultresult = Math.pow(resultresult, 2);
+		//return resultresult;
+		return 0;
 	}
 
 	// how many devices until root?
