@@ -30,7 +30,7 @@ public class Run {
 
 		while (true) {
 			scanner.nextLine();
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < 10; i++) {  
 				System.out.println("");
 			}
 			view(currentMover);
@@ -151,6 +151,7 @@ public class Run {
 		// 5 devices = 8
 		// 2x - 2
 		// i will create one array slot for each vector, then multiply TODO
+		// now we just have to do multiplicatoin and add and then pow 2 for probability
 		
 		int remadeArrayLength = array.length * 2 - 2;
 		double[][] remadeArray = new double[remadeArrayLength][2];
