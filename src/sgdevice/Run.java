@@ -1,5 +1,9 @@
 package sgdevice;
 
+// TODO
+// merge
+// calculate all probabilities
+
 import java.util.Scanner;
 
 public class Run {
@@ -51,7 +55,7 @@ public class Run {
 			switch (line) {
 			case "calculate":
 				//System.out.println(calculateSingularProbability(currentMover));
-				calculateSingularProbability(currentMover);
+				System.out.println(calculateSingularProbability(currentMover));
 				break;
 			case "goto child":
 				currentMover = next(currentMover);
@@ -143,16 +147,6 @@ public class Run {
 			mover = mover.parent;
 		}
 
-		
-		// this portion only works for two SG devices, need to apply rule for more.
-		// 2 devices = 2
-		// 3 devices = 4
-		// 4 devices = 6
-		// 5 devices = 8
-		// 2x - 2
-		// i will create one array slot for each vector, then multiply TODO
-		// now we just have to do multiplicatoin and add and then pow 2 for probability
-		
 		int remadeArrayLength = array.length * 2 - 2;
 		double[][] remadeArray = new double[remadeArrayLength][2];
 		remadeArray[0][0] = array[0][0];
@@ -174,20 +168,54 @@ public class Run {
 		// a, b, c, d
 		// a, b, b, c, c, d, 
 		
+		// cross 
 		
+		System.out.println("Individual Eigenvectors:"); // note that eigenvectors are printed in backwards form from the way devices are placed
+		System.out.println("");
 		for (int a = array.length - 1; a > -1; a--) {
 			for (int b = 0; b < array[0].length; b++) {
 				System.out.println(array[a][b]);
 			}
 			System.out.println("-------");
 		}
+		System.out.println("");
 		System.out.println("-------");
+		System.out.println("");
+		System.out.println("Eigenvector calculation preparation:");
+		System.out.println("");
+		
+		
 		for (int a = remadeArray.length - 1; a > -1; a--) {
 			for (int b = 0; b < remadeArray[0].length; b++) {
 				System.out.println(remadeArray[a][b]);
 			}
 			System.out.println("-------");
 		}
+		
+		
+		System.out.println("");
+		System.out.println("-------");
+		System.out.println("");
+		System.out.println("Eigenvector pairs are now cross multiplied: ");
+		System.out.println("");
+		
+		// now i need to make another array to store values that later i will multiply
+		double[] finalArray = new double[remadeArray.length / 2];
+		
+		for(int a = remadeArray.length -1; a > -1; a = a - 2) {
+			double result = 1;
+			result = (remadeArray[a][0] * remadeArray[a-1][0]) + (remadeArray[a][1] * remadeArray[a-1][1]);
+			finalArray[((a+1)/2) - 1] = result;
+		}
+		
+		// then we multiply the finalArray values togetehr, then square for probability
+		double toPrint = 1;
+		for(int a = finalArray.length - 1; a > -1; a--) {
+			toPrint *= finalArray[a];
+		}
+		
+		toPrint = Math.pow(toPrint, 2);
+		
 		/*
 		double result = 1;
 		double resultresult = 0;
@@ -199,10 +227,12 @@ public class Run {
 			resultresult = resultresult + result;
 		}
 		*/
-	
 		//resultresult = Math.pow(resultresult, 2);
 		//return resultresult;
-		return 0;
+		
+		
+		
+		return toPrint;
 	}
 
 	// how many devices until root?
