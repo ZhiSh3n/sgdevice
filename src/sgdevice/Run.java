@@ -3,6 +3,7 @@ package sgdevice;
 // TODO
 // merge
 // calculate all probabilities
+// add ability to input eigenvectors
 
 import java.util.Scanner;
 

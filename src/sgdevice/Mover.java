@@ -47,17 +47,16 @@ public class Mover {
 		String other = new String("other");
 		String closed = new String("closed");
 		String open = new String("open");
-		String theta = new String("theta");
-		int degree;
+		double degree;
 		String orientation = reader.nextLine();
 		String compare = new String(orientation);
 		if (compare.equals(other)) {
 			// if equals other, ask for a degree
 			System.out.println("Choose a degree: ");
-			degree = reader.nextInt();
+			degree = reader.nextDouble();
 			device.setDegree(degree);
 		}
-		if (!compare.equals(z) && !compare.equals(x) && !compare.equals(other) && !compare.equals(closed) && !compare.equals(open) && !compare.equals(theta)) {
+		if (!compare.equals(z) && !compare.equals(x) && !compare.equals(other) && !compare.equals(closed) && !compare.equals(open)) {
 			System.out.println("That is an unacceptable value. Try again.");
 			orientationChooser(device);
 		} else {

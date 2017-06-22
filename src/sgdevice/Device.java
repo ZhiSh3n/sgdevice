@@ -2,17 +2,15 @@ package sgdevice;
 
 public class Device {
 	
-	// a device will have an orientation/degree
-	// [z][x][other][closed] , also how to implement merge?
 	public String orientation;
-	public int degree;
+	public double degree;
 	
 	public Device() {
 		this.orientation = null;
 		this.degree = 0;
 	}
 	
-	public void setDegree(int degree) {
+	public void setDegree(double degree) {
 		this.degree = degree;
 	}
 	
@@ -24,7 +22,7 @@ public class Device {
 		return this.orientation;
 	}
 	
-	public int getDegree() {
+	public double getDegree() {
 		return this.degree;
 	}
 
