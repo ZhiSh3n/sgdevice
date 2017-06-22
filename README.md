@@ -1,5 +1,7 @@
 Stern-Gerlach Experiment Calculator
 ==========================================
+Created from scratch by: Zachary Yong
+
 A Stern-Gerlach device demonstrates the intrinsic quantum property of atomic-scale systems which is that the spatial orientation of angular momentum is quantized. 
 
 The experiment involves sending a beam of particles through a magnetic field and observing their deflection. Results show that particles possess an intrinsic angular momentum, but unlike the angular momentum of a classically spinning object, the angular momentum of a particle takes only certain quantized values.
@@ -48,6 +50,7 @@ Commands:
 ## Example Operation
 <img src="SGDEG1.png" />
 A very simple SG scenario is shown in the image above. How would I use the calculator to calculate the probability that a particle entering the first SG device would come out of the negative channel of the second SG device, where the angle of the second SG device is 90°?
+
 1. Run the program and set the orientation of the root node to be aligned with the Z axis. 
 2. Add a child, and set its orientation to ```other```. This will prompt you for an angle (degrees), which we will put as ```90```. 
 3. After you have created a child (from your root SG device), you must ```goto``` the child before you can perform any operations on it. Thus, use the ```goto child``` command, which will prompt you for the child number. It is the case with the SG tree that any SG device only has two children, numbered ```0``` and ```1```, so in this case, respond to the prompt with ```0``` to go to the child you have just created.
@@ -72,5 +75,7 @@ calculate
 ```
 
 ## To Do List
-
+* Add a merging functionality.
+* Add functionality to recognized closed/open channels and thus be able to add a function to calculate every probability that is open.
+* Add functionality for users to add SG devices based on Eigenvectors, not orientation.
 
