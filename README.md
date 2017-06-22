@@ -7,7 +7,7 @@ The experiment involves sending a beam of particles through a magnetic field and
 In addition to this concept, only one component of a particle's spin can be measured at a time, meaning that taking a measurement of the spin along a particle's Z axis destroys information about the same particle's spin along the X and Y axis.
 
 ## Files
-* [Run.java](Run.java)
+* [Run.java](src/sgdevice/Run.java)
 	* Initiates the calculator.
 	* Includes a command prompt; the listed commands are sufficient to create SG devices and navigate between parent devices, children devices, and sibling devices.
 	* Also includes some of the command executables, although this will most likely be moved into Mover.java.
