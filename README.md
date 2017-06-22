@@ -74,6 +74,33 @@ goto child
 calculate
 ```
 
+## Details
+* Custom Eigenvectors
+	* Z alignment, X alignment, and alignment with regards to a certain angle° relative to the Z axis can be expressed through typical eigenvectors. Sometimes, it is useful to be able to be able to emit particles with an initial, and known, spin state. 
+	* Using the ```eigenvector``` command, we're able to do just this. 
+	* There are some intricacies with using custom eigenvectors, which can be smoothed out with a wholesome understanding of how this calculator represents the SG tree.
+		1. Custom eigenvectors can only be applied at the start of any tree -- that is, as the root definition. Logically speaking, this makes sense, as custom eigenvectors are a result of a closed, well-defined SG device; placing custom eigenvectors in the center of an SG tree will serve only to, essentially, create a root at that point. 
+		2. Each Mover object, or node, can broadly be defined by two characteristics: its own orientation, and an eigenvector, which is the product of both  itself but also its parent. This is because the eigenvector of a SG device is defined partly by the orientation of its parent, and also by its placement in regards to being on the positive channel or the negative channel of its parent.
+		3. Thus, in this calculator, it is important to know that the eigenvector displayed for a certain SG device is not based on the device's orientation; instead, it is based off of the parent's orientation, and the device's own placement. 
+		4. Also, this is why the root node does not have an eigenvector of its own.
+		5. Finally, when you are entering custom eigenvectors, the sum of the squares of each vector component must add up to equal 1. This is because a quanton must exist in a well-defined quantum state, and so the vector representing the quanton's spin state must be normalized.
+
+Example commands to use a custom eigenvector:
+```
+eigenvector
+0.2
+0.8
+add child
+z
+goto child
+0
+add child
+open
+goto child
+0
+calculate
+```
+
 ## To Do List
 * Add a merging functionality.
 * Add functionality to recognized closed/open channels and thus be able to add a function to calculate every probability that is open.
