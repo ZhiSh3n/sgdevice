@@ -13,11 +13,11 @@ In addition to this concept, only one component of a particle's spin can be meas
 	* Initiates the calculator.
 	* Includes a command prompt; the listed commands are sufficient to create SG devices and navigate between parent devices, children devices, and sibling devices.
 	* Also includes some of the command executables, although this will most likely be moved into Mover.java.
-* Device.java
+* [Device.java](src/sgdevice/Device.java)
 	* Defines the properties and attributes of the Stern-Gerlach device.
 	* Includes standard GET/SET.
 	* A SG device only has one essential component, which is its Orientation. Traditionally, particles have their spin measured along the Z axis, but functionality exists for measuring spin along the X axis and a variable axis.
-* Mover.java
+* [Mover.java](src/sgdevice/Mover.java)
 	* A node object used to draw the SG device tree.
 	* A mover object (essentially a node) has a:
 		* Parent mover.
@@ -25,7 +25,7 @@ In addition to this concept, only one component of a particle's spin can be meas
 		* An integer dictionary.
 		* An encapsulated SG device.
 	* Each mover object is basically a SG device. The mover object is only used to link the SG devices together, and in this regard, the mover object is a node.
-* Holder.java
+* [Holder.java](src/sgdevice/Holder.java)
 	* A temporary holder object (just in case).
 	* Not currently being used.
 
