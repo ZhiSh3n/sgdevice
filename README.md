@@ -7,7 +7,7 @@ The experiment involves sending a beam of particles through a magnetic field and
 In addition to this concept, only one component of a particle's spin can be measured at a time, meaning that taking a measurement of the spin along a particle's Z axis destroys information about the same particle's spin along the X and Y axis.
 
 ## Files
-* Run.java
+* [Run.java](Run.java)
 	* Initiates the calculator.
 	* Includes a command prompt; the listed commands are sufficient to create SG devices and navigate between parent devices, children devices, and sibling devices.
 	* Also includes some of the command executables, although this will most likely be moved into Mover.java.
@@ -46,12 +46,31 @@ Commands:
 
 
 ## Example Operation
+<img src="SGDEG1.png" />
+A very simple SG scenario is shown in the image above. How would I use the calculator to calculate the probability that a particle entering the first SG device would come out of the negative channel of the second SG device, where the angle of the second SG device is 90°?
+1. Run the program and set the orientation of the root node to be aligned with the Z axis. 
+2. Add a child, and set its orientation to ```other```. This will prompt you for an angle (degrees), which we will put as ```90```. 
+3. After you have created a child (from your root SG device), you must ```goto``` the child before you can perform any operations on it. Thus, use the ```goto child``` command, which will prompt you for the child number. It is the case with the SG tree that any SG device only has two children, numbered ```0``` and ```1```, so in this case, respond to the prompt with ```0``` to go to the child you have just created.
+4. We will now create two more children. At this point however, it is not important what orientation these children are in; the point of creating these children is to determine which channel we are concerned with calculating from. It is important to note that the first child created on any parent will be affixed to the parent's positive channel. This child is numbered ```0```. To access the negative channel of a parent, you must create a second child, numbered ```1```. Therefore, since we are concerned with the negative channel, we must run ```add child``` twice more.
+5. Now, we will move to the negative channel, and from there we will perform the calculations. Input ```goto child```, and then ```1``` for the negative channel child.
+6. Now, simply input ```calculate``` and the result for the probability will appear. This is the probability that a particle entering the first Z-oriented SG device will appear out of the negative end of the 90°-oriented second SG device.
+All inputs are shown below:
+```
+z
+add child
+other
+90
+goto child
+0
+add child
+open
+add child
+open
+goto child
+1
+calculate
+```
 
 ## To Do List
 
-
-
-
-[example](https://github.com/watson-developer-cloud/node-sdk/blob/master/examples/natural_language_classifier.v1.js)
-<img src="https://visual-recognition-demo.mybluemix.net/images/samples/5.jpg" width="150" />
 
