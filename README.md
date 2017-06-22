@@ -32,6 +32,26 @@ In addition to this concept, only one component of a particle's spin can be meas
 ```
 Choose an orientation for this device [z][x][other][theta][closed][open]: 
 ```
-2. After this, you will be presented with a list of commands.
+2. After this, you will be presented with a list of commands. From here onwards, you can choose any of the listed options, including adding children, tracing layers, etc. 
+```
+Commands: 
+   [calculate] : calculate eigenvectors for particular result
+   [goto child] : navigate to child number # (starting from 0)
+   [goto parent] : navigate to the parent
+   [goto sibling] : navigate to a sibling #
+   [add child] : add a child (you will be promped to define an SG Device
+   [trace device] : how many devices in a row
+```
+3. When you're ready to calculate the SG probability for a chain of devices, use the ```[calculate]``` command.
+
+
+## Example Operation
 
 ## To Do List
+
+
+
+
+[example](https://github.com/watson-developer-cloud/node-sdk/blob/master/examples/natural_language_classifier.v1.js)
+<img src="https://visual-recognition-demo.mybluemix.net/images/samples/5.jpg" width="150" />
+
