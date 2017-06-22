@@ -40,7 +40,7 @@ public class Mover {
 	}
 	
 	public static void orientationChooser(Device device) {
-		System.out.println("Choose an orientation for this device [z][x][other][theta][closed][open]: ");
+		System.out.println("Choose an orientation for this device [z][x][other][closed][open]: ");
 		Scanner reader = new Scanner(System.in);
 		String z = new String("z");
 		String x = new String("x");
