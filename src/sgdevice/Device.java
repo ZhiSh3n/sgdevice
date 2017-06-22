@@ -4,6 +4,8 @@ public class Device {
 	
 	public String orientation;
 	public double degree;
+	public double first;
+	public double second;
 	
 	public Device() {
 		this.orientation = null;
@@ -24,6 +26,14 @@ public class Device {
 	
 	public double getDegree() {
 		return this.degree;
+	}
+	
+	public void setFirst(double first) {
+		this.first = first;
+	}
+	
+	public void setSecond(double second) {
+		this.second = second;
 	}
 
 }

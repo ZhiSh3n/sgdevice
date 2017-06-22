@@ -49,6 +49,9 @@ public class Run {
 			case "trace device":
 				System.out.println(Mover.traceDevice(currentMover));
 				break;
+			case "refresh":
+				Mover.refreshEigenvectors(currentMover);
+				break;
 			default:
 				System.out.println("That is not a valid command.");
 			}
