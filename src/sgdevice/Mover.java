@@ -91,7 +91,7 @@ public class Mover {
 		} else {
 			System.out.println(mover.device.orientation);
 		}
-		System.out.print("Eigenvector: " + mover.device.first + " , " + mover.device.second);
+		System.out.print("Eigenvector: " + mover.device.firstEigenvectorComponent + " , " + mover.device.secondEigenvectorComponent);
 	}
 	
 	public static void orientationChooser(Device device) {
@@ -148,33 +148,36 @@ public class Mover {
 			switch (mover.parent.device.orientation) {
 			case "x":
 				if (mover.parent.children.indexOf(mover) == 0) {
-					mover.device.first = Math.sqrt(0.5);
-					mover.device.second = Math.sqrt(0.5);
+					mover.device.firstEigenvectorComponent = Math.sqrt(0.5);
+					mover.device.secondEigenvectorComponent = Math.sqrt(0.5);
 				} else {
-					mover.device.first = Math.sqrt(0.5);
-					mover.device.second = -1 * Math.sqrt(0.5);
+					mover.device.firstEigenvectorComponent = Math.sqrt(0.5);
+					mover.device.secondEigenvectorComponent = -1 * Math.sqrt(0.5);
 				}
 				break;
 			case "z":
 				if (mover.parent.children.indexOf(mover) == 0) {
-					mover.device.first = 1;
-					mover.device.second = 0;
+					mover.device.firstEigenvectorComponent = 1;
+					mover.device.secondEigenvectorComponent = 0;
 				} else {
-					mover.device.first = 0;
-					mover.device.second = 1;
+					mover.device.firstEigenvectorComponent = 0;
+					mover.device.secondEigenvectorComponent = 1;
 				}
 				break;
 			case "other":
 				if (mover.parent.children.indexOf(mover) == 0) {
 					// it is positve theta
-					mover.device.first = Math.cos(0.5 * mover.device.degree * Math.PI / 180);
-					mover.device.second = Math.sin(0.5 * mover.device.degree * Math.PI / 180);
+					mover.device.firstEigenvectorComponent = Math.cos(0.5 * mover.parent.device.degree * Math.PI / 180);
+					mover.device.secondEigenvectorComponent = Math.sin(0.5 * mover.parent.device.degree * Math.PI / 180);
 				} else {
 					// it is a negative theta
-					mover.device.first = -1 * Math.sin((1 / 2) * mover.device.degree * Math.PI / 180);
-					mover.device.second = Math.cos((1 / 2) * mover.device.degree * Math.PI / 180);
+					mover.device.firstEigenvectorComponent = -1 * Math.sin((1 / 2) * mover.parent.device.degree * Math.PI / 180);
+					mover.device.secondEigenvectorComponent = Math.cos((1 / 2) * mover.parent.device.degree * Math.PI / 180);
 				}
 				break;
+			case "eigenvector":
+				mover.device.firstEigenvectorComponent = mover.parent.device.first;
+				mover.device.secondEigenvectorComponent = mover.parent.device.second;
 			default:
 			}
 		}
@@ -182,51 +185,16 @@ public class Mover {
 
 	// calculate probability
 	public static double calculateSingularProbability(Mover mover) {
+		// maybe add "open" requirement
+		
 		// create an array for eigenvectors
 		// eg. if traceDevice = 3, there are 2 complete SG devices
 		double[][] array = new double[traceDevice(mover) - 1][2];
-		int[] posOrNeg = getPosOrNegArray(mover);
-		// first we go to the latest SG Device
-		// note that counter is decreased by 1 already here.
-		mover = mover.parent;
-		for (int counter = traceDevice(mover) - 1; counter > -1; counter--){ 
-			//System.out.println("Counter is: " + counter);
-			switch (mover.device.orientation) {
-			case "x":
-				if (posOrNeg[counter] == 0) {
-					array[counter][0] = Math.sqrt(0.5);
-					array[counter][1] = Math.sqrt(0.5);
-				} else {
-					array[counter][0] = Math.sqrt(0.5);
-					array[counter][1] = -1 * Math.sqrt(0.5);
-				}
-				break;
-			case "z":
-				if (posOrNeg[counter] == 0) {
-					array[counter][0] = 1;
-					array[counter][1] = 0;
-				} else {
-					array[counter][0] = 0;
-					array[counter][1] = 1;
-				}
-				break;
-			case "other":
-				if (posOrNeg[counter] == 0) {
-					// it is positve theta
-					array[counter][0] = Math.cos(0.5 * mover.device.degree * Math.PI / 180);
-					array[counter][1] = Math.sin(0.5 * mover.device.degree * Math.PI / 180);
-				} else {
-					// it is a negative theta
-					array[counter][0] = -1 * Math.sin((1 / 2) * mover.device.degree * Math.PI / 180);
-					array[counter][1] = Math.cos((1 / 2) * mover.device.degree * Math.PI / 180);
-				}
-				break;
-			case "eigenvector":
-				array[counter][0] = mover.device.first;
-				array[counter][1] = mover.device.second;
-				break;
-			default:
-			}
+		
+		
+		for (int counter = traceDevice(mover) - 2; counter > -1; counter--){ 
+			array[counter][0] = mover.device.firstEigenvectorComponent;
+			array[counter][1] = mover.device.secondEigenvectorComponent;
 			mover = mover.parent;
 		}
 

@@ -6,6 +6,8 @@ public class Device {
 	public double degree;
 	public double first;
 	public double second;
+	public double firstEigenvectorComponent;
+	public double secondEigenvectorComponent;
 	
 	public Device() {
 		this.orientation = null;
