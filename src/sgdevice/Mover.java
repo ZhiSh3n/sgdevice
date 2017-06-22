@@ -20,7 +20,7 @@ public class Mover {
 		this.children = new ArrayList<>();
 		this.parent = parent;
 		this.device = new Device();
-		orientationChooser(this.device);
+		orientationChooser(this.device, this);
 	}
 	
 	public static void addChild(Mover mover) {
@@ -39,62 +39,7 @@ public class Mover {
 		}
 	}
 	
-	public static Mover sibling(Mover mover) {
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter sibling element number: ");
-		int siblingNumber = scanner.nextInt();
-		if (siblingNumber == mover.parent.children.indexOf(mover)) {
-			System.out.println("You are already on that sibling/child.");
-			return mover;
-		} else {
-			return mover.parent.children.get(siblingNumber);
-		}
-
-	}
-	
-	// move to the next layer, specifying a child number (0, 1, 2 ..)
-	public static Mover next(Mover mover) {
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter the child number: ");
-		int childNumber = scanner.nextInt();
-		if (childNumber >= mover.children.size()) {
-			System.out.println("That child does not exist.");
-			return mover;
-		} else {
-			return mover.children.get(childNumber);
-		}
-	}
-	
-	// go to parent
-	public static Mover previous(Mover mover) {
-		if (mover.parent == null) {
-			System.out.println("You are already in the root node!");
-			return mover;
-		} else {
-			System.out.println("You have moved from layer " + mover.layer + " to layer " + mover.parent.layer);
-			return mover.parent;
-		}
-	}
-	
-	// view current node information
-	public static void view(Mover mover) {
-		refreshEigenvectors(mover);
-		System.out.println("This node has " + mover.children.size() + " children.");
-		if (mover.parent != null) {
-			System.out.println("This node is element " + mover.parent.children.indexOf(mover) + " among its sibings.");
-		}
-		System.out.println("This node is in Layer: " + mover.layer);
-		String other = new String("other");
-		System.out.print("This node has an orientation: ");
-		if (mover.device.orientation.equals(other)) {
-			System.out.println(mover.device.degree);
-		} else {
-			System.out.println(mover.device.orientation);
-		}
-		System.out.print("Eigenvector: " + mover.device.firstEigenvectorComponent + " , " + mover.device.secondEigenvectorComponent);
-	}
-	
-	public static void orientationChooser(Device device) {
+	public static void orientationChooser(Device device, Mover mover) {
 		System.out.println("Choose an orientation for this device [z][x][eigenvector][other][closed][open]: ");
 		Scanner reader = new Scanner(System.in);
 		String z = new String("z");
@@ -115,16 +60,21 @@ public class Mover {
 			device.setDegree(degree);
 		}
 		if (compare.equals(eigenvector)) {
-			System.out.println("Input first component: ");
-			first = reader.nextDouble();
-			device.setFirst(first);
-			System.out.println("Input second component: ");
-			second = reader.nextDouble();
-			device.setSecond(second);
+			if (mover.parent == null) {
+				System.out.println("Input first component: ");
+				first = reader.nextDouble();
+				device.setFirst(first);
+				System.out.println("Input second component: ");
+				second = reader.nextDouble();
+				device.setSecond(second);
+			} else {
+				System.out.println("DENIED: only the root device can have a custom eigenvector.");
+				orientationChooser(device, mover);
+			}
 		}
 		if (!compare.equals(z) && !compare.equals(x) && !compare.equals(other) && !compare.equals(closed) && !compare.equals(open) && !compare.equals(eigenvector)) {
 			System.out.println("That is an unacceptable value. Try again.");
-			orientationChooser(device);
+			orientationChooser(device, mover);
 		} else {
 			device.setOrientation(orientation);
 		}
@@ -292,6 +242,61 @@ public class Mover {
 			counter++;
 		}
 		return (counter + 1);
+	}
+
+	// move to the next layer, specifying a child number (0, 1, 2 ..)
+	public static Mover next(Mover mover) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Enter the child number: ");
+		int childNumber = scanner.nextInt();
+		if (childNumber >= mover.children.size()) {
+			System.out.println("That child does not exist.");
+			return mover;
+		} else {
+			return mover.children.get(childNumber);
+		}
+	}
+
+	// go to parent
+	public static Mover previous(Mover mover) {
+		if (mover.parent == null) {
+			System.out.println("You are already in the root node!");
+			return mover;
+		} else {
+			System.out.println("You have moved from layer " + mover.layer + " to layer " + mover.parent.layer);
+			return mover.parent;
+		}
+	}
+
+	public static Mover sibling(Mover mover) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Enter sibling element number: ");
+		int siblingNumber = scanner.nextInt();
+		if (siblingNumber == mover.parent.children.indexOf(mover)) {
+			System.out.println("You are already on that sibling/child.");
+			return mover;
+		} else {
+			return mover.parent.children.get(siblingNumber);
+		}
+	
+	}
+
+	// view current node information
+	public static void view(Mover mover) {
+		refreshEigenvectors(mover);
+		System.out.println("This node has " + mover.children.size() + " children.");
+		if (mover.parent != null) {
+			System.out.println("This node is element " + mover.parent.children.indexOf(mover) + " among its sibings.");
+		}
+		System.out.println("This node is in Layer: " + mover.layer);
+		String other = new String("other");
+		System.out.print("This node has an orientation: ");
+		if (mover.device.orientation.equals(other)) {
+			System.out.println(mover.device.degree);
+		} else {
+			System.out.println(mover.device.orientation);
+		}
+		System.out.print("Eigenvector: " + mover.device.firstEigenvectorComponent + " , " + mover.device.secondEigenvectorComponent);
 	}
 	
 
