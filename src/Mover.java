@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -9,16 +8,33 @@ public class Mover {
     public Mover parent;
     public Device device;
 
-    public Mover(int layer, Mover parent) {
+    public Mover(int layer, Mover parent, boolean isManual) {
 
-        // Instantiate Mover variables.
+        // every Mover will have these variables
         this.layer = layer;
-        this.children = new ArrayList<>(2);
+        this.children = new ArrayList<>();
         this.parent = parent;
         this.device = new Device();
 
-        // When a new Mover is created, an orientation for its device must be chosen.
-        orientationChooser(this.device, this);
+        if (isManual) {
+            // if we are creating a Mover manually, choose an orientation for it
+            orientationChooser(this.device, this);
+
+            // then, we will create a placeholderChild for it
+            // since we pass isManual == false, the placeholderChild will be given an orientation
+            Mover placeholderChild = new Mover(layer + 1, this, false);
+
+            // if our Mover is the root, only add one placeholderChild
+            // else, add two placeholderChild(s)
+            if (this.parent == null) {
+                this.children.add(placeholderChild);
+            } else {
+                this.children.add(placeholderChild);
+                this.children.add(placeholderChild);
+            }
+        } else {
+            this.device.setOrientation("open");
+        }
     }
 
     // This method iterates through every Mover object in a tree.
@@ -202,36 +218,43 @@ public class Mover {
         }
     }
 
+    // count how many children a mover has EXCLUDING open
+    public static int numberOfChildrenExcludingOpen(Mover mover) {
+        int counter = 0;
+        for (int i = 0; i < mover.children.size(); i++) {
+            if (mover.children.get(i).device.orientation != "open") {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
     // Method for adding a child to a Mover.
     public static void addChild(Mover mover, int integer) {
         String closed = new String("closed");
         String open = new String("open");
 
-		/*
-		 * TODO since this is run at the very start to make a root,
-		 * we need to modify it so that two null spaces are created
-		 * JK it is not run at the very start...
-		 *
-		 * i guess that this doesn't apply to root and only applies to children thereafter.
-		 */
 
         // TODO edit this to accept numeric values
         if (integer == 2) {
             // If [true] a null value was specified so we add a child normally.
 
-            if (mover.children.size() >= 2) {
+
+            if (numberOfChildrenExcludingOpen(mover) >= 2) {
                 System.out.println("You can add no more children");
             } else if (mover.device.orientation.equals(closed)){
                 System.out.println("This device is closed");
-            } else if (mover.device.orientation.equals(open)) {
-                System.out.println("This device is open");
-            } else if ((mover.parent == null) && (mover.children.size() == 1)) {
+            } else if ((mover.parent == null) && (numberOfChildrenExcludingOpen(mover) == 1)) {
                 System.out.println("The root can only have one child.");
-                // TODO make it so that you can choose to make the child positive or negative; ie. you don't have to
-                // build 2 children in order to access the negative port.
-            } else {
-                System.out.println("Adding Child " + (mover.children.size()) + " among [0,1]");
-                mover.children.add(new Mover(mover.layer+1, mover));
+            } else if (numberOfChildrenExcludingOpen(mover) == 0){ // they have no real children
+                System.out.println("Adding Child " + (numberOfChildrenExcludingOpen(mover)));
+                mover.children.remove(0);
+                mover.children.add(new Mover(mover.layer+1, mover, true));
+                System.out.println("Child added");
+            } else if (numberOfChildrenExcludingOpen(mover) == 1){ // they have one real child
+                System.out.println("Adding Child " + (numberOfChildrenExcludingOpen(mover)));
+                mover.children.remove(1);
+                mover.children.add(new Mover(mover.layer+1, mover, true));
                 System.out.println("Child added");
             }
         } else {
@@ -249,7 +272,7 @@ public class Mover {
                     // build 2 children in order to access the negative port.
                 } else { // TODO edit this to add a child at the specified location
                     System.out.println("Adding Child " + (mover.children.size()) + " among [0,1]");
-                    mover.children.add(integer, new Mover(mover.layer+1, mover));
+                    mover.children.add(integer, new Mover(mover.layer+1, mover, true));
                     System.out.println("Child added");
 
                     // you get an error because the arraylist is still size 0, make it so that
@@ -316,22 +339,30 @@ public class Mover {
         if (mover.layer == 0) {
             System.out.println("NOTICE: This is the root node.");
         }
-        System.out.println("Layer: " + mover.layer);
-        System.out.println("Children: " + mover.children.size());
-        if (mover.parent != null) {
-            System.out.println("Element: " + mover.parent.children.indexOf(mover) + " among [0,1]");
-            System.out.println("Siblings: " + (mover.parent.children.size()-1) + " out of 1");
-            System.out.print("Eigenvector: [" + mover.device.firstEigenvectorComponent + ", " + mover.device.secondEigenvectorComponent + "]");
-        }
-
-        String other = new String("other");
-        System.out.print("Orientation: ");
-        if (mover.device.orientation.equals(other)) {
-            System.out.println(mover.device.degree + "°");
+        if (mover.device.orientation == "open") {
+            System.out.println("Layer: " + mover.layer);
+            System.out.println("This is an OPEN Mover. It has NO children.");
+            System.out.println("If you want it to have children, go to its parent and use the [add child] function.");
+            if (mover.parent != null) {
+                System.out.print("Eigenvector: [" + mover.device.firstEigenvectorComponent + ", " + mover.device.secondEigenvectorComponent + "]");
+            }
         } else {
-            System.out.println(mover.device.orientation);
-        }
+            System.out.println("Layer: " + mover.layer);
+            System.out.println("Children: " + mover.children.size());
+            if (mover.parent != null) {
+                System.out.println("Element: " + mover.parent.children.indexOf(mover) + " among [0,1]");
+                System.out.println("Siblings: " + (mover.parent.children.size()-1) + " out of 1");
+                System.out.print("Eigenvector: [" + mover.device.firstEigenvectorComponent + ", " + mover.device.secondEigenvectorComponent + "]");
+            }
 
+            String other = new String("other");
+            System.out.print("Orientation: ");
+            if (mover.device.orientation.equals(other)) {
+                System.out.println(mover.device.degree + "°");
+            } else {
+                System.out.println(mover.device.orientation);
+            }
+        }
     }
 
     // Antiquities

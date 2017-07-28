@@ -9,35 +9,18 @@ import java.util.Scanner;
 
 public class Run {
 
-    public static void promptEnterKey(){
-        System.out.println("Press \"ENTER\" to continue...");
-        Scanner scanner = new Scanner(System.in);
-        scanner.nextLine();
-    }
-
     public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
-        System.out.println("");
-        System.out.println("Welcome to SGD-Calculator.");
-        System.out.println("==========================");
-        System.out.println("");
-        System.out.println("This calculator is able to solve two types of problems:");
-        System.out.println("");
-        System.out.println("  - Custom Eigenvector");
-        System.out.println("  - Theta Oriented");
-        System.out.println("");
-        System.out.println("You will now be prompted to decide on which type of problem you want to pursue.");
-        System.out.println("If want to work with Custom Eigenvectors, choose the 'eigenvector' option when prompted.");
-        System.out.println("Otherwise, you may choose any of the other available options.");
-        System.out.println("");
+        welcomeText();
         promptEnterKey();
 
 
         // make a new Mover with a null parent
-        Mover root = new Mover(0, null);
-
+        Mover root = new Mover(0, null, true);
         // set the currentMover equal to this root Mover
         Mover currentMover = root;
+
 
         // this is the prompter
         while (true) {
@@ -75,7 +58,7 @@ public class Run {
                     currentMover = Mover.sibling(currentMover);
                     break;
                 case "add child":
-                    Mover.addChild(currentMover, 2); // TODO
+                    Mover.addChild(currentMover, 2); // TODO change array list
                     break;
                 case "trace device":
                     System.out.println(Mover.traceDevice(currentMover));
@@ -123,8 +106,6 @@ public class Run {
                     //System.out.println("-------------");
                     for (int i = 0; i < refinedHolder.size(); i++) {
                         currentMover = refinedHolder.get(i);
-
-
                         Mover temporaryMover = currentMover;
                         for (int a = 0; a < Mover.traceDevice(currentMover); a++) {
 
@@ -145,11 +126,7 @@ public class Run {
                             if (a == Mover.traceDevice(currentMover) -1) {
                                 System.out.println("");
                             }
-
-
-
                             temporaryMover = temporaryMover.parent;
-
                         }
                         System.out.print    ("Probability: ");
                         System.out.println(Mover.calculateSingularProbability(currentMover, false));
@@ -182,11 +159,29 @@ public class Run {
                         System.out.println("That is not a valid command.");
                     }
             }
-
         }
-
-
     }
 
+    public static void promptEnterKey(){
+        System.out.println("Press \"ENTER\" to continue...");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
+    }
+
+    public static void welcomeText() {
+        System.out.println("");
+        System.out.println("Welcome to SGD-Calculator.");
+        System.out.println("==========================");
+        System.out.println("");
+        System.out.println("This calculator is able to solve two types of problems:");
+        System.out.println("");
+        System.out.println("  - Custom Eigenvector");
+        System.out.println("  - Theta Oriented");
+        System.out.println("");
+        System.out.println("You will now be prompted to decide on which type of problem you want to pursue.");
+        System.out.println("If want to work with Custom Eigenvectors, choose the 'eigenvector' option when prompted.");
+        System.out.println("Otherwise, you may choose any of the other available options.");
+        System.out.println("");
+    }
 
 }
