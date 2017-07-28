@@ -1,11 +1,14 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// TODO
 /*
- * TODO should root be allowed to have 2 children? it shouldn't right? because root is an incoming 
- * quantum state and has no eigenvector of its own.
+the nature of
+- MERGING: essentially you ignore the device that has its children nodes merge
+- CLOSING:
+    - where you take the probability of the closed sibling and add that to yours
+    - for example where there
  */
-
 
 public class Run {
 
@@ -29,13 +32,13 @@ public class Run {
             Mover.view(currentMover);
             System.out.println("");
             System.out.println("Commands: ");
-            System.out.println("   [calculate] : calculate eigenvectors for particular result");
+            System.out.println("   [calculate] : calculate eigenvectors for particular result | please run this from the desired open node");
             System.out.println("   [goto child] : navigate to child number # (starting from 0)");
             System.out.println("   [goto parent] : navigate to the parent");
             System.out.println("   [goto sibling] : navigate to a sibling #");
             System.out.println("   [add child] : add a child (you will be promped to define an SG Device");
             System.out.println("   [trace device] : how many devices in a row");
-            System.out.println("   [algorithm] : calculate all");
+            System.out.println("   [algorithm] : calculate all | this can be run anywhere");
             // Adding some white space for aesthetics.
             String line = scanner.nextLine();
             for (int i = 0; i < 10; i++) {
@@ -47,7 +50,7 @@ public class Run {
                     System.out.println(Mover.calculateSingularProbability(currentMover, true));
                     break;
                 case "goto child":
-                    currentMover = Mover.next(currentMover);
+                    currentMover = Mover.next(currentMover); // TODO add functionality for [add child #]
                     break;
                 case "goto parent":
                     currentMover = Mover.previous(currentMover);
@@ -56,7 +59,7 @@ public class Run {
                     currentMover = Mover.sibling(currentMover);
                     break;
                 case "add child":
-                    Mover.addChild(currentMover, 2); // TODO change array list
+                    Mover.addChild(currentMover, 2); // TODO add functionality for [add child #]
                     break;
                 case "trace device":
                     System.out.println(Mover.traceDevice(currentMover));
@@ -85,24 +88,17 @@ public class Run {
                     for (int i = 0; i < algorithmHolder.size(); i++) {
                         System.out.println(algorithmHolder.get(i).layer);
                     }
-
                     ArrayList<Mover> refinedHolder = new ArrayList<>();
-                    // this will be used to hold only the movers with NO children..
-                    // and later TODO aren't closed or merged, but might only be open
-                    // TODO when we make all movers have default children, check here that they aren't open
                     for (int i = 0; i < algorithmHolder.size(); i++) {
                         if (algorithmHolder.get(i).children.size() == 0) {
                             // if the mover has no children...
                             refinedHolder.add(algorithmHolder.get(i));
                         }
                     }
-
                     System.out.println("Refined holder");
                     for (int i = 0; i < refinedHolder.size(); i++) {
                         System.out.println(refinedHolder.get(i).layer);
                     }
-
-
                     // now we have an arraylist of all the movers that are at the end of their branches...
                     // let's iterate through this array
                     //System.out.println("-------------");
