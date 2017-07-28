@@ -9,13 +9,37 @@ import java.util.Scanner;
 
 public class Run {
 
+    public static void promptEnterKey(){
+        System.out.println("Press \"ENTER\" to continue...");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        System.out.println("");
+        System.out.println("Welcome to SGD-Calculator.");
+        System.out.println("==========================");
+        System.out.println("");
+        System.out.println("This calculator is able to solve two types of problems:");
+        System.out.println("");
+        System.out.println("  - Custom Eigenvector");
+        System.out.println("  - Theta Oriented");
+        System.out.println("");
+        System.out.println("You will now be prompted to decide on which type of problem you want to pursue.");
+        System.out.println("If want to work with Custom Eigenvectors, choose the 'eigenvector' option when prompted.");
+        System.out.println("Otherwise, you may choose any of the other available options.");
+        System.out.println("");
+        promptEnterKey();
+
+
+        // make a new Mover with a null parent
         Mover root = new Mover(0, null);
+
+        // set the currentMover equal to this root Mover
         Mover currentMover = root;
 
-        System.out.println("");
-
+        // this is the prompter
         while (true) {
             scanner.nextLine();
             for (int i = 0; i < 10; i++) {
@@ -36,7 +60,6 @@ public class Run {
             for (int i = 0; i < 10; i++) {
                 System.out.println("");
             }
-
             switch (line) {
                 case "calculate":
                     // Set to TRUE to see individual Eigenvectors.
@@ -73,19 +96,20 @@ public class Run {
                     Mover.cycler(currentMover, holder, algorithmHolder);
 
                     // The below is for debugging purposes.
-				/*
-				System.out.println("Counts, excluding root: " + holder.getVal());
-				System.out.println("Counts size of arraylist, including root: " + algorithmHolder.size());
-				
-				System.out.println("Displays each element (layer) in the arraylist");
-				for (int i = 0; i < algorithmHolder.size(); i++) {
-					System.out.println(algorithmHolder.get(i).layer);
-				}
-				*/
+                    /*
+                    System.out.println("Counts, excluding root: " + holder.getVal());
+                    System.out.println("Counts size of arraylist, including root: " + algorithmHolder.size());
+
+                    System.out.println("Displays each element (layer) in the arraylist");
+                    for (int i = 0; i < algorithmHolder.size(); i++) {
+                        System.out.println(algorithmHolder.get(i).layer);
+                    }
+                    */
 
                     ArrayList<Mover> refinedHolder = new ArrayList<>();
                     // this will be used to hold only the movers with NO children..
                     // and later TODO aren't closed or merged, but might only be open
+                    // TODO when we make all movers have default children, check here that they aren't open
                     for (int i = 0; i < algorithmHolder.size(); i++) {
                         if (algorithmHolder.get(i).children.size() == 0) {
                             // if the mover has no children...
@@ -133,6 +157,8 @@ public class Run {
 
                     break;
                 default:
+                    // TODO here i am trying to do the add child #
+                    // TODO but it is failing because i need to make 2 children for every node
 				/*
 				 * Search the first half of the [line] to see if there is the word [add].
 				 * If there is, then the user is trying to type [add child].

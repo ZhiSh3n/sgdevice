@@ -13,7 +13,7 @@ public class Mover {
 
         // Instantiate Mover variables.
         this.layer = layer;
-        this.children = new ArrayList<>();
+        this.children = new ArrayList<>(2);
         this.parent = parent;
         this.device = new Device();
 
@@ -153,11 +153,20 @@ public class Mover {
 
     // Method for choosing the orientation of a Mover when you first create it.
     public static void orientationChooser(Device device, Mover mover) {
-        System.out.println("Choose an orientation for this device [z][x][eigenvector][other][closed][open]: ");
+
+        if (mover.parent == null) {
+            // if TRUE, this mover is the root, so we don't want to give it the option of [closed][open]
+            System.out.println("Choose an orientation for this device [z][x][theta] or an eigenvector [eigenvector]:");
+        } else {
+            // if FALSE, this mover is not the root, so we don't want to give it the option of [eigenvector]
+            System.out.println("Choose an orientation for this device [z][x][theta] or [closed][open]: ");
+        }
+
+
         Scanner reader = new Scanner(System.in);
         String z = new String("z");
         String x = new String("x");
-        String other = new String("other");
+        String theta = new String("theta");
         String closed = new String("closed");
         String eigenvector = new String("eigenvector");
         String open = new String("open");
@@ -166,7 +175,7 @@ public class Mover {
         double second;
         String orientation = reader.nextLine();
         String compare = new String(orientation);
-        if (compare.equals(other)) {
+        if (compare.equals(theta)) {
             // Choose an angle if the orientation is not z or x.
             System.out.println("Choose a degree: ");
             degree = reader.nextDouble();
@@ -185,7 +194,7 @@ public class Mover {
                 orientationChooser(device, mover);
             }
         }
-        if (!compare.equals(z) && !compare.equals(x) && !compare.equals(other) && !compare.equals(closed) && !compare.equals(open) && !compare.equals(eigenvector)) {
+        if (!compare.equals(z) && !compare.equals(x) && !compare.equals(theta) && !compare.equals(closed) && !compare.equals(open) && !compare.equals(eigenvector)) {
             System.out.println("That is an unacceptable value. Try again.");
             orientationChooser(device, mover);
         } else {
