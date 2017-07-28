@@ -22,15 +22,16 @@ public class Mover {
 
             // then, we will create a placeholderChild for it
             // since we pass isManual == false, the placeholderChild will be given an orientation
-            Mover placeholderChild = new Mover(layer + 1, this, false);
+            Mover placeholderChildOne = new Mover(layer + 1, this, false);
+            Mover placeholderChildTwo = new Mover(layer + 1, this, false);
 
             // if our Mover is the root, only add one placeholderChild
             // else, add two placeholderChild(s)
             if (this.parent == null) {
-                this.children.add(placeholderChild);
+                this.children.add(placeholderChildOne);
             } else {
-                this.children.add(placeholderChild);
-                this.children.add(placeholderChild);
+                this.children.add(placeholderChildOne);
+                this.children.add(placeholderChildTwo);
             }
         } else {
             this.device.setOrientation("open");
