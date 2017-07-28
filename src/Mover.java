@@ -41,9 +41,11 @@ public class Mover {
     public static void cycler(Mover mover, Holder holder, ArrayList list) {
         // TODO recognize open, closed, and merge Mover configurations.
 
+        // add the root mover to list
         if (mover.parent == null) {
             list.add(mover);
         }
+        //
         for (int i = 0; i < mover.children.size(); i++) {
             refreshEigenvectors(mover.children.get(i));
             list.add(mover.children.get(i));
@@ -57,74 +59,79 @@ public class Mover {
 
     // This method calculates the probability of an SG configuration for a linear link of SG devices.
     public static double calculateSingularProbability(Mover mover, Boolean bool) {
-        double[][] array = new double[traceDevice(mover) - 1][2];
-        for (int counter = traceDevice(mover) - 2; counter > -1; counter--){
-            array[counter][0] = mover.device.firstEigenvectorComponent;
-            array[counter][1] = mover.device.secondEigenvectorComponent;
-            mover = mover.parent;
-        }
-        int remadeArrayLength = (array.length * 2) - 2;
-        double[][] remadeArray = new double[remadeArrayLength][2];
-        remadeArray[0][0] = array[0][0];
-        remadeArray[0][1] = array[0][1];
-        remadeArray[remadeArray.length - 1][0] = array[array.length - 1][0];
-        remadeArray[remadeArray.length - 1][1] = array[array.length - 1][1];
-        for(int a = array.length - 2; a > 0; a--) {
-            remadeArray[(2*a)][0] = array[a][0];
-            remadeArray[(2*a)][1] = array[a][1];
-            remadeArray[(2*a)-1][0] = array[a][0];
-            remadeArray[(2*a)-1][1] = array[a][1];
-        }
-
-        // This if-statement is a toggle used for debugging; it allows you to verify individual Eigenvectors.
-        if (bool == true) {
-            System.out.println("Individual Eigenvectors:");
-            System.out.println("");
-            for (int a = array.length - 1; a > -1; a--) {
-                for (int b = 0; b < array[0].length; b++) {
-                    System.out.println(array[a][b]);
-                }
-                System.out.println("-------");
+        if (mover.parent == null || mover.parent.parent == null ) {
+            System.out.println("You do not have any functional devices set up.");
+            return 0;
+        } else {
+            double[][] array = new double[traceDevice(mover) - 1][2];
+            for (int counter = traceDevice(mover) - 2; counter > -1; counter--){
+                array[counter][0] = mover.device.firstEigenvectorComponent;
+                array[counter][1] = mover.device.secondEigenvectorComponent;
+                mover = mover.parent;
             }
-            System.out.println("");
-            System.out.println("-------");
-            System.out.println("");
-            System.out.println("Eigenvector calculation preparation:");
-            System.out.println("");
-            for (int a = remadeArray.length - 1; a > -1; a--) {
-                for (int b = 0; b < remadeArray[0].length; b++) {
-                    System.out.println(remadeArray[a][b]);
-                }
-                System.out.println("-------");
+            int remadeArrayLength = (array.length * 2) - 2;
+            double[][] remadeArray = new double[remadeArrayLength][2];
+            remadeArray[0][0] = array[0][0];
+            remadeArray[0][1] = array[0][1];
+            remadeArray[remadeArray.length - 1][0] = array[array.length - 1][0];
+            remadeArray[remadeArray.length - 1][1] = array[array.length - 1][1];
+            for(int a = array.length - 2; a > 0; a--) {
+                remadeArray[(2*a)][0] = array[a][0];
+                remadeArray[(2*a)][1] = array[a][1];
+                remadeArray[(2*a)-1][0] = array[a][0];
+                remadeArray[(2*a)-1][1] = array[a][1];
             }
-            System.out.println("");
-            System.out.println("-------");
-            System.out.println("");
-            System.out.println("Eigenvector pairs are now cross multiplied: ");
-            System.out.println("");
+
+            // This if-statement is a toggle used for debugging; it allows you to verify individual Eigenvectors.
+            if (bool == true) {
+                System.out.println("Individual Eigenvectors:");
+                System.out.println("");
+                for (int a = array.length - 1; a > -1; a--) {
+                    for (int b = 0; b < array[0].length; b++) {
+                        System.out.println(array[a][b]);
+                    }
+                    System.out.println("-------");
+                }
+                System.out.println("");
+                System.out.println("");
+                System.out.println("");
+                System.out.println("Eigenvector calculation preparation:");
+                System.out.println("");
+                for (int a = remadeArray.length - 1; a > -1; a--) {
+                    for (int b = 0; b < remadeArray[0].length; b++) {
+                        System.out.println(remadeArray[a][b]);
+                    }
+                    System.out.println("-------");
+                }
+                System.out.println("");
+                System.out.println("-------");
+                System.out.println("");
+                System.out.println("Eigenvector pairs are now cross multiplied: ");
+                System.out.println("");
+            }
+
+
+
+            // Third array is used to hold the contents of (multiple) cross products.
+            double[] finalArray = new double[remadeArray.length / 2];
+
+            // Store contents in third array.
+            for(int a = remadeArray.length -1; a > -1; a = a - 2) {
+                double result = 1;
+                result = (remadeArray[a][0] * remadeArray[a-1][0]) + (remadeArray[a][1] * remadeArray[a-1][1]);
+                finalArray[((a+1)/2) - 1] = result;
+            }
+
+            // Multiply values in the third array together and square the result.
+            double toPrint = 1;
+            for(int a = finalArray.length - 1; a > -1; a--) {
+                toPrint *= finalArray[a];
+            }
+            toPrint = Math.pow(toPrint, 2);
+
+            // Print probability.
+            return toPrint;
         }
-
-
-
-        // Third array is used to hold the contents of (multiple) cross products.
-        double[] finalArray = new double[remadeArray.length / 2];
-
-        // Store contents in third array.
-        for(int a = remadeArray.length -1; a > -1; a = a - 2) {
-            double result = 1;
-            result = (remadeArray[a][0] * remadeArray[a-1][0]) + (remadeArray[a][1] * remadeArray[a-1][1]);
-            finalArray[((a+1)/2) - 1] = result;
-        }
-
-        // Multiply values in the third array together and square the result.
-        double toPrint = 1;
-        for(int a = finalArray.length - 1; a > -1; a--) {
-            toPrint *= finalArray[a];
-        }
-        toPrint = Math.pow(toPrint, 2);
-
-        // Print probability.
-        return toPrint;
     }
 
     public static void refreshEigenvectors(Mover mover) {
@@ -150,7 +157,7 @@ public class Mover {
                         mover.device.secondEigenvectorComponent = 1;
                     }
                     break;
-                case "other":
+                case "theta":
                     if (mover.parent.children.indexOf(mover) == 0) {
                         mover.device.firstEigenvectorComponent = Math.cos(0.5 * mover.parent.device.degree * Math.PI / 180);
                         mover.device.secondEigenvectorComponent = Math.sin(0.5 * mover.parent.device.degree * Math.PI / 180);
@@ -238,23 +245,25 @@ public class Mover {
         // TODO edit this to accept numeric values
         if (integer == 2) {
             // If [true] a null value was specified so we add a child normally.
-
-
             if (numberOfChildrenExcludingOpen(mover) >= 2) {
-                System.out.println("You can add no more children");
+                System.out.println("You already have the maximum number of devices attached to this device (2).");
+                System.out.println("You can add no more devices.");
             } else if (mover.device.orientation.equals(closed)){
-                System.out.println("This device is closed");
+                System.out.println("This is a closed node. You can't attach a device to a closed node.");
+            } else if (mover.device.orientation.equals(open)) {
+                System.out.println("This is an open node. You can't attach a device to an open node.");
+                System.out.println("You can replace this open node with a device by using [goto parent] and then [add child].");
             } else if ((mover.parent == null) && (numberOfChildrenExcludingOpen(mover) == 1)) {
                 System.out.println("The root can only have one child.");
             } else if (numberOfChildrenExcludingOpen(mover) == 0){ // they have no real children
-                System.out.println("Adding Child " + (numberOfChildrenExcludingOpen(mover)));
+                System.out.println("Adding Child 0");
                 mover.children.remove(0);
-                mover.children.add(new Mover(mover.layer+1, mover, true));
+                mover.children.add(0, new Mover(mover.layer+1, mover, true));
                 System.out.println("Child added");
             } else if (numberOfChildrenExcludingOpen(mover) == 1){ // they have one real child
-                System.out.println("Adding Child " + (numberOfChildrenExcludingOpen(mover)));
+                System.out.println("Adding Child 1");
                 mover.children.remove(1);
-                mover.children.add(new Mover(mover.layer+1, mover, true));
+                mover.children.add(1, new Mover(mover.layer+1, mover, true));
                 System.out.println("Child added");
             }
         } else {
@@ -337,7 +346,7 @@ public class Mover {
     public static void view(Mover mover) {
         refreshEigenvectors(mover);
         if (mover.layer == 0) {
-            System.out.println("NOTICE: This is the root node.");
+            System.out.println("NOTICE: This is the root device.");
         }
         if (mover.device.orientation == "open") {
             System.out.println("Layer: " + mover.layer);
@@ -348,11 +357,17 @@ public class Mover {
             }
         } else {
             System.out.println("Layer: " + mover.layer);
-            System.out.println("Children: " + mover.children.size());
+            System.out.println("Children: " + numberOfChildrenExcludingOpen(mover));
+            if (mover.parent == null) {
+                System.out.println("Open nodes: " + (1 - numberOfChildrenExcludingOpen(mover)));
+            } else {
+                System.out.println("Open nodes: " + (2 - numberOfChildrenExcludingOpen(mover)));
+            }
+
             if (mover.parent != null) {
                 System.out.println("Element: " + mover.parent.children.indexOf(mover) + " among [0,1]");
                 System.out.println("Siblings: " + (mover.parent.children.size()-1) + " out of 1");
-                System.out.print("Eigenvector: [" + mover.device.firstEigenvectorComponent + ", " + mover.device.secondEigenvectorComponent + "]");
+                System.out.println("Eigenvector: [" + mover.device.firstEigenvectorComponent + ", " + mover.device.secondEigenvectorComponent + "]");
             }
 
             String other = new String("other");

@@ -15,12 +15,10 @@ public class Run {
         welcomeText();
         promptEnterKey();
 
-
         // make a new Mover with a null parent
         Mover root = new Mover(0, null, true);
         // set the currentMover equal to this root Mover
         Mover currentMover = root;
-
 
         // this is the prompter
         while (true) {
@@ -46,7 +44,7 @@ public class Run {
             switch (line) {
                 case "calculate":
                     // Set to TRUE to see individual Eigenvectors.
-                    System.out.println(Mover.calculateSingularProbability(currentMover, false));
+                    System.out.println(Mover.calculateSingularProbability(currentMover, true));
                     break;
                 case "goto child":
                     currentMover = Mover.next(currentMover);
@@ -79,7 +77,7 @@ public class Run {
                     Mover.cycler(currentMover, holder, algorithmHolder);
 
                     // The below is for debugging purposes.
-                    /*
+
                     System.out.println("Counts, excluding root: " + holder.getVal());
                     System.out.println("Counts size of arraylist, including root: " + algorithmHolder.size());
 
@@ -87,7 +85,6 @@ public class Run {
                     for (int i = 0; i < algorithmHolder.size(); i++) {
                         System.out.println(algorithmHolder.get(i).layer);
                     }
-                    */
 
                     ArrayList<Mover> refinedHolder = new ArrayList<>();
                     // this will be used to hold only the movers with NO children..
@@ -98,6 +95,11 @@ public class Run {
                             // if the mover has no children...
                             refinedHolder.add(algorithmHolder.get(i));
                         }
+                    }
+
+                    System.out.println("Refined holder");
+                    for (int i = 0; i < refinedHolder.size(); i++) {
+                        System.out.println(refinedHolder.get(i).layer);
                     }
 
 
